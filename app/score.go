@@ -12,8 +12,8 @@ type scoreService struct {
 }
 
 type ScoreService interface {
-	Score1(score_api.Score, *score_api.ScoreRes) error
-	Score2(score_api.Score, *score_api.ScoreRes) error
+	Evaluate(score_api.Score, *score_api.ScoreRes) error
+	Calculate(score_api.Score, *score_api.ScoreRes) error
 }
 
 func NewScoreService(s score.Score) ScoreService {
@@ -22,8 +22,8 @@ func NewScoreService(s score.Score) ScoreService {
 	}
 }
 
-func (s *scoreService) Score1(col score_api.Score, res *score_api.ScoreRes) error {
-	bys, err := s.s.Score1(col)
+func (s *scoreService) Evaluate(col score_api.Score, res *score_api.ScoreRes) error {
+	bys, err := s.s.Evaluate(col)
 	if err != nil {
 		return err
 	}
@@ -35,8 +35,8 @@ func (s *scoreService) Score1(col score_api.Score, res *score_api.ScoreRes) erro
 	return nil
 }
 
-func (s *scoreService) Score2(col score_api.Score, res *score_api.ScoreRes) error {
-	bys, err := s.s.Score2(col)
+func (s *scoreService) Calculate(col score_api.Score, res *score_api.ScoreRes) error {
+	bys, err := s.s.Calculate(col)
 	if err != nil {
 		return err
 	}

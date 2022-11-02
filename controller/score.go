@@ -15,8 +15,8 @@ func AddRouteScore(r *gin.Engine, s score.Score) {
 	}
 
 	func() {
-		r.POST("/score-1", baseScore.Score1)
-		r.POST("/score-2", baseScore.Score2)
+		r.POST("/evaluate", baseScore.Evaluate)
+		r.POST("/calculate", baseScore.Calculate)
 	}()
 
 }
@@ -25,7 +25,7 @@ type BaseScore struct {
 	s app.ScoreService
 }
 
-func (b *BaseScore) Score1(c *gin.Context) {
+func (b *BaseScore) Evaluate(c *gin.Context) {
 	col := score_api.Score{}
 	if err := c.ShouldBindBodyWith(&col, binding.JSON); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
@@ -33,7 +33,7 @@ func (b *BaseScore) Score1(c *gin.Context) {
 	}
 
 	var res score_api.ScoreRes
-	err := b.s.Score1(col, &res)
+	err := b.s.Evaluate(col, &res)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
 		return
@@ -42,7 +42,7 @@ func (b *BaseScore) Score1(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-func (b *BaseScore) Score2(c *gin.Context) {
+func (b *BaseScore) Calculate(c *gin.Context) {
 	col := score_api.Score{}
 	if err := c.ShouldBindBodyWith(&col, binding.JSON); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
@@ -50,7 +50,7 @@ func (b *BaseScore) Score2(c *gin.Context) {
 	}
 
 	var res score_api.ScoreRes
-	err := b.s.Score1(col, &res)
+	err := b.s.Calculate(col, &res)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
 		return

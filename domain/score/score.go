@@ -5,6 +5,6 @@ import (
 )
 
 type Score interface {
-	Score1(score_api.Score) ([]byte, error)
-	Score2(score_api.Score) ([]byte, error)
+	Evaluate(score_api.Score) ([]byte, error)
+	Calculate(score_api.Score) ([]byte, error)
 }

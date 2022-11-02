@@ -20,10 +20,12 @@ COPY ./py /opt/app/go-py/py
 
 RUN chmod 755 -R /opt/app/go-py/py
 
-ENV OBS_AK RIBWOTGZ2VMC1RDZKYCG
+ENV EVALUATE /opt/app/go-py/py/evaluate.py
+ENV CALCULATE /opt/app/go-py/py/calculate_fid.py
+ENV UPLOAD /opt/app/go-py/py/
 
-RUN pip install --user esdk-obs-python --trusted-host pypi.org
-RUN pip install --user  -r /opt/app/go-py/py/requirements.txt
+RUN pip install esdk-obs-python --trusted-host pypi.org
+RUN pip install -r /opt/app/go-py/py/requirements.txt
 
 COPY --from=BUILDER /go/src/openeuler/go-py/go-py /opt/app/go-py
 

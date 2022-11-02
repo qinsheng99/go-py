@@ -5,6 +5,7 @@ import (
 	"github.com/qinsheng99/go-py/controller"
 	"github.com/qinsheng99/go-py/infrastructure/score"
 	"net/http"
+	"os"
 )
 
 func SetRoute(r *gin.Engine) {
@@ -15,7 +16,7 @@ func SetRoute(r *gin.Engine) {
 	controller.AddRouteScore(
 		r,
 		score.NewScore(
-			"/opt/app/go-py/py/evaluate.py",
-			"/opt/app/go-py/py/calculate_fid.py"),
+			os.Getenv("EVALUATE"),
+			os.Getenv("CALCULATE")),
 	)
 }
