@@ -2,8 +2,11 @@ import os
 import traceback
 from obs import ObsClient
 
-# obs_ak = "T7Q8VP4YVRHSHFIUPNWK"
-# obs_sk = "l4guS2cgseEAJCtPHmYHDvASZpVbqFC4g728xca8"
+obs_sk = os.getenv("OBS_SK")
+obs_ak = os.getenv("OBS_AK")
+obs_bucketname = os.getenv("OBS_BUCKETNAME")
+obs_endpoint = os.getenv("OBS_ENDPOINT")
+
 
 
 
