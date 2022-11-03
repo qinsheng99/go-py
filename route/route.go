@@ -14,9 +14,6 @@ func SetRoute(r *gin.Engine) {
 	})
 
 	controller.AddRouteScore(
-		r,
-		score.NewScore(
-			os.Getenv("EVALUATE"),
-			os.Getenv("CALCULATE")),
+		r, score.NewScore(os.Getenv("EVALUATE"), os.Getenv("CALCULATE")),
 	)
 }
