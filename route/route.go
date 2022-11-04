@@ -9,11 +9,12 @@ import (
 )
 
 func SetRoute(r *gin.Engine) {
-	r.GET("/health", func(c *gin.Context) {
+	group := r.Group("/v1")
+	group.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "success")
 	})
 
 	controller.AddRouteScore(
-		r, score.NewScore(os.Getenv("EVALUATE"), os.Getenv("CALCULATE")),
+		group, score.NewScore(os.Getenv("EVALUATE"), os.Getenv("CALCULATE")),
 	)
 }

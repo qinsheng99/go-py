@@ -6,10 +6,12 @@ import (
 	"github.com/qinsheng99/go-py/api/score_api"
 	"github.com/qinsheng99/go-py/app"
 	"github.com/qinsheng99/go-py/domain/score"
+	"log"
 	"net/http"
+	"time"
 )
 
-func AddRouteScore(r *gin.Engine, s score.Score) {
+func AddRouteScore(r *gin.RouterGroup, s score.Score) {
 	baseScore := BaseScore{
 		s: app.NewScoreService(s),
 	}
@@ -32,14 +34,21 @@ func (b *BaseScore) Evaluate(c *gin.Context) {
 		return
 	}
 
-	var res score_api.ScoreRes
-	err := b.s.Evaluate(col, &res)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
-		return
-	}
+	go func() {
+		time.Sleep(5 * time.Second)
+		var res score_api.ScoreRes
+		err := b.s.Evaluate(col, &res)
+		if err != nil {
+			log.Printf("err is %v", err)
+			//c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+			return
+		}
 
-	c.JSON(http.StatusOK, res)
+		log.Printf("user_name is %s", col.UserName)
+		log.Printf("res is %v", res)
+	}()
+
+	c.JSON(http.StatusOK, "success")
 }
 
 func (b *BaseScore) Calculate(c *gin.Context) {
@@ -49,12 +58,19 @@ func (b *BaseScore) Calculate(c *gin.Context) {
 		return
 	}
 
-	var res score_api.ScoreRes
-	err := b.s.Calculate(col, &res)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
-		return
-	}
+	go func() {
+		time.Sleep(5 * time.Second)
+		var res score_api.ScoreRes
+		err := b.s.Calculate(col, &res)
+		if err != nil {
+			log.Printf("err is %v", err)
+			//c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+			return
+		}
 
-	c.JSON(http.StatusOK, res)
+		log.Printf("user_name is %s", col.UserName)
+		log.Printf("res is %v", res)
+	}()
+
+	c.JSON(http.StatusOK, "success")
 }
