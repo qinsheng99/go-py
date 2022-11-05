@@ -31,7 +31,7 @@ def evaluate4cls(pred_path, y_true_path, cls, pos=1):
     if len(y_pred) != len(y_true):
         return {
             "status": -1,
-            "metrics": None,
+#             "metrics": None,
             "msg": "评估失败，结果长度不一致"
         }
     ec = Evaluation4Classfication(y_pred, y_true, cls=cls, pos=pos)
