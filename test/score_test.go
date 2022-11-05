@@ -26,9 +26,11 @@ func TestEvaluate(t *testing.T) {
 }
 
 // UserResult 存有1000张图片的zip文件
+// UserName 用户名
 func TestCalculate(t *testing.T) {
 	err := client.Calculate(&sdk.Calculate{
 		UserResult: "xihe-obj/competitions/昇思AI挑战赛-艺术家画作风格迁移/submit_result/victor_1/result",
+		UserName:   "yonghuming",
 	})
 	if err != nil {
 		t.Fatal(err)
