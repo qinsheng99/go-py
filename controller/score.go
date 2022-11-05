@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/qinsheng99/go-py/api/score_api"
@@ -59,8 +60,22 @@ func (b *BaseScore) Calculate(c *gin.Context) {
 			return
 		}
 
+		var reserr error
+		var data float64
+
+		if res.Status == -1 {
+			reserr = errors.New(res.Msg)
+			data = -1
+		} else {
+			reserr = nil
+			data = res.Data
+		}
+
 		log.Printf("user_name is %s", col.UserName)
-		log.Printf("res is %v", res)
+		log.Printf("res is %v", data)
+		if reserr != nil {
+			log.Printf("err is %v", reserr.Error())
+		}
 	}()
 
 	c.JSON(http.StatusOK, "success")

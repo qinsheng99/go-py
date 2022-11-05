@@ -570,7 +570,7 @@ def downloadFile(obs_path, local_path, result):
     data_pred = obs.downloadFile(obs_path, local_path)
     if data_pred['status'] != 200:
         result['status'] = -1
-        result['msg'] = '请耐心等待~'
+        result['msg'] = data_pred['msg']
     return data_pred
 
 
