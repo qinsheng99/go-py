@@ -2,6 +2,7 @@ package sdk
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/opensourceways/community-robot-lib/utils"
 	"github.com/qinsheng99/go-py/api/score_api"
@@ -40,20 +41,33 @@ func (t CalculateEvaluate) Calculate(opt *Calculate) error {
 	return t.forwardTo(req, nil)
 }
 
-func (t CalculateEvaluate) Evaluate(opt *Calculate) (error, *score_api.ScoreRes) {
+func (t CalculateEvaluate) Evaluate(opt *Calculate) (_ error, score float64) {
 	payload, err := utils.JsonMarshal(opt)
 	if err != nil {
-		return err, nil
+		return err, 0
 	}
 
 	req, err := http.NewRequest(http.MethodPost, t.evaluateURL(), bytes.NewBuffer(payload))
 	if err != nil {
-		return err, nil
+		return err, 0
 	}
 
 	var res = &score_api.ScoreRes{}
 
-	return t.forwardTo(req, res), res
+	err = t.forwardTo(req, res)
+	if err != nil {
+		return err, 0
+	}
+
+	if res.Status == -1 {
+		err = errors.New(res.Msg)
+		score = -1
+	} else {
+		err = nil
+		score = res.Metrics.Acc
+	}
+
+	return err, score
 }
 
 func (t CalculateEvaluate) forwardTo(req *http.Request, jsonResp interface{}) (err error) {
