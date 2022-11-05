@@ -40,34 +40,27 @@ func (t CalculateEvaluate) Calculate(opt *Calculate) error {
 	return t.forwardTo(req, nil)
 }
 
-func (t CalculateEvaluate) Evaluate(opt *Calculate) error {
+func (t CalculateEvaluate) Evaluate(opt *Calculate) (error, *score_api.ScoreRes) {
 	payload, err := utils.JsonMarshal(opt)
 	if err != nil {
-		return err
+		return err, nil
 	}
 
 	req, err := http.NewRequest(http.MethodPost, t.evaluateURL(), bytes.NewBuffer(payload))
 	if err != nil {
-		return err
+		return err, nil
 	}
 
-	return t.forwardTo(req, nil)
+	var res = &score_api.ScoreRes{}
+
+	return t.forwardTo(req, res), res
 }
 
 func (t CalculateEvaluate) forwardTo(req *http.Request, jsonResp interface{}) (err error) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 
-	if jsonResp != nil {
-		v := struct {
-			Data interface{} `json:"data"`
-		}{jsonResp}
-
-		_, err = t.cli.ForwardTo(req, &v)
-	} else {
-		_, err = t.cli.ForwardTo(req, jsonResp)
-	}
-
+	_, err = t.cli.ForwardTo(req, jsonResp)
 	return
 }
 

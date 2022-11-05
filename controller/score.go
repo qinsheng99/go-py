@@ -8,7 +8,6 @@ import (
 	"github.com/qinsheng99/go-py/domain/score"
 	"log"
 	"net/http"
-	"time"
 )
 
 func AddRouteScore(r *gin.RouterGroup, s score.Score) {
@@ -34,21 +33,14 @@ func (b *BaseScore) Evaluate(c *gin.Context) {
 		return
 	}
 
-	go func() {
-		time.Sleep(5 * time.Second)
-		var res score_api.ScoreRes
-		err := b.s.Evaluate(col, &res)
-		if err != nil {
-			log.Printf("err is %v", err)
-			//c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
-			return
-		}
+	var res score_api.ScoreRes
+	err := b.s.Evaluate(col, &res)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		return
+	}
 
-		log.Printf("user_name is %s", col.UserName)
-		log.Printf("res is %v", res)
-	}()
-
-	c.JSON(http.StatusOK, "success")
+	c.JSON(http.StatusOK, res)
 }
 
 func (b *BaseScore) Calculate(c *gin.Context) {
@@ -59,7 +51,6 @@ func (b *BaseScore) Calculate(c *gin.Context) {
 	}
 
 	go func() {
-		time.Sleep(5 * time.Second)
 		var res score_api.ScoreRes
 		err := b.s.Calculate(col, &res)
 		if err != nil {
