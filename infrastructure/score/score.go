@@ -6,6 +6,7 @@ import (
 	"github.com/qinsheng99/go-py/domain/score"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 )
 
@@ -32,7 +33,9 @@ func (s *scoreImpl) Evaluate(col score_api.Score) (data []byte, err error) {
 }
 
 func (s *scoreImpl) Calculate(col score_api.Score) (data []byte, err error) {
-	args := []string{s.calculate, "--user_result", col.UserResult, "--unzip_path", os.Getenv("UPLOAD")}
+	path := filepath.Join(os.Getenv("UPLOAD"), col.UserName)
+	defer os.RemoveAll(path)
+	args := []string{s.calculate, "--user_result", col.UserResult, "--unzip_path", path}
 	data, err = exec.Command("python3", args...).Output()
 
 	if err != nil {
